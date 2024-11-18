@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кофейня</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Кофе</h1>
+
+    <form id="calculatorForm">
+        <label for="quantity">Кофе:</label>
+        <input type="number" id="quantity" name="quantity" value="1" min="1"><br><br>
+
+        <label>Выберите кофе:</label><br>
+        <input type="radio" id="type1" name="mealType" value="type1" checked>
+        <label for="type1">Латте</label><br>
+        <input type="radio" id="type2" name="mealType" value="type2">
+        <label for="type2">Капучино </label><br>
+        <input type="radio" id="type3" name="mealType" value="type3">
+        <label for="type3">Американо</label><br><br>
+
+        <div id="optionsDiv" class="hidden">
+            <label for="options">Дополнительный наполнитель</label>
+            <select id="options" name="options">
+                <option value="option1">Обычное молоко</option>
+                <option value="option2">Миндальное молоко</option>
+            </select><br><br>
+        </div>
+
+        <div id="propertyDiv" class="hidden">
+            <input type="checkbox" id="property" name="property">
+            <label for="property">Без сахара</label><br><br>
+        </div>
+
+        <button type="button" onclick="calculatePrice()">Рассчитать стоимость</button>
+    </form>
+
+    <h2>Итоговая стоимость: <span id="totalPrice">0</span> руб.</h2>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const mealTypeRadios = document.querySelectorAll('input[name="mealType"]');
+            const optionsDiv = document.getElementById("optionsDiv");
+            const propertyDiv = document.getElementById("propertyDiv");
+
+            mealTypeRadios.forEach(radio => {
+                radio.addEventListener("change", handleMealTypeChange);
+            });
+
+            function handleMealTypeChange() {
+                const selectedType = document.querySelector('input[name="mealType"]:checked').value;
+
+                if (selectedType === "type1") {
+                    optionsDiv.classList.remove("hidden");
+                    propertyDiv.classList.add("hidden");
+                } else if (selectedType === "type2") {
+                    optionsDiv.classList.add("hidden");
+                    propertyDiv.classList.remove("hidden");
+                } else if (selectedType === "type3") {
+                    optionsDiv.classList.add("hidden");
+                    propertyDiv.classList.add("hidden");
+                }
+            }
+
+            handleMealTypeChange(); 
+        });
+
+        function calculatePrice() {
+            const quantity = parseInt(document.getElementById("quantity").value, 10);
+            const mealType = document.querySelector('input[name="mealType"]:checked').value;
+            let basePrice = 100; 
+
+            if (mealType === "type1") {
+                basePrice += 100; 
+            } else if (mealType === "type2") {
+                if (document.getElementById("property").checked) {
+                    basePrice += 200; 
+                }
+            } else if (mealType === "type3") {
+                basePrice += 150; 
+            }
+
+            const totalPrice = basePrice * quantity;
+            document.getElementById("totalPrice").textContent = totalPrice;
+        }
+    </script>
+</body>
+</html>
